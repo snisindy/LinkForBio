@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNI sindy - Official Store</title>
+    <!-- การตั้งค่า SEO -->
+    <meta name="description" content="ติดต่อร้าน SNI sindy ดูรายละเอียดสินค้า รีวิวจากลูกค้า และช่องทางการติดต่อครบวงจร">
+    <meta name="keywords" content="SNI sindy, สินค้าน่ารัก, รีวิวร้าน, ช่องทางติดต่อ, เครดิตร้าน, สั่งซื้อสินค้า">
+    <meta name="author" content="SNI sindy">
+    <!-- การตั้งค่า Logo บนแถบเบราว์เซอร์ (Favicon) -->
+    <link rel="icon" href="https://img2.pic.in.th/DA0D2171-669F-4863-B0AD-A3084C2E881A.png" type="image/png">
+    
+    <!-- เรียกใช้ Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .tab-active { border-bottom: 2px solid #ec4899; color: #db2777; font-weight: bold; }
+        .tab-inactive { color: #9ca3af; }
+        .tab-inactive:hover { color: #f472b6; }
+        /* ซ่อนการโหลดเริ่มต้น */
+        #loader { display: flex; }
+        #app-content { display: none; }
+    </style>
+</head>
+<body class="bg-pink-50 min-h-screen flex flex-col text-gray-800">
+
+    <!-- หน้าจอโหลดข้อมูล -->
+    <div id="loader" class="fixed inset-0 bg-pink-50 items-center justify-center z-50 flex-col">
+        <div class="w-16 h-16 border-4 border-pink-200 border-t-pink-500 rounded-full animate-spin"></div>
+        <p class="mt-4 text-pink-600 font-semibold text-lg">กำลังโหลดข้อมูลร้าน...</p>
+    </div>
+
+    <!-- แถบนำทาง (Navbar) -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="https://img2.pic.in.th/DA0D2171-669F-4863-B0AD-A3084C2E881A.png" alt="SNI sindy Logo" class="w-10 h-10 rounded-full border border-pink-100 object-cover">
+                <h1 class="text-xl font-bold text-pink-600 tracking-wide">SNI sindy</h1>
+            </div>
+            <button onclick="checkAdminAccess()" class="text-xs bg-pink-100 text-pink-600 px-3 py-1 rounded-full hover:bg-pink-200 transition-colors">ระบบจัดการ</button>
+        </div>
+        <nav class="max-w-4xl mx-auto px-4 flex space-x-6 overflow-x-auto pb-1" id="nav-tabs">
+            <button onclick="switchTab('contact')" id="tab-contact" class="pb-2 px-1 tab-active whitespace-nowrap">ช่องทางติดต่อ</button>
+            <button onclick="switchTab('products')" id="tab-products" class="pb-2 px-1 tab-inactive whitespace-nowrap">ตัวอย่างสินค้า</button>
+            <button onclick="switchTab('reviews')" id="tab-reviews" class="pb-2 px-1 tab-inactive whitespace-nowrap">เครดิตและรีวิว</button>
+            <button onclick="switchTab('admin')" id="tab-admin" class="pb-2 px-1 tab-inactive whitespace-nowrap hidden">หลังบ้าน</button>
+        </nav>
+    </header>
+
+    <!-- เนื้อหาหลัก -->
+    <main class="flex-grow max-w-4xl mx-auto w-full p-4" id="app-content">
+        
+        <!-- ส่วนที่ 1: ช่องทางการติดต่อ -->
+        <section id="view-contact" class="space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm text-center border border-pink-100">
+                <img src="https://img2.pic.in.th/DA0D2171-669F-4863-B0AD-A3084C2E881A.png" alt="Logo" class="w-24 h-24 mx-auto rounded-full shadow-md border-2 border-pink-200 mb-4 object-cover">
+                <h2 class="text-2xl font-bold text-pink-600 mb-2">ยินดีต้อนรับสู่ SNI sindy</h2>
+                <p class="text-gray-500 mb-6">ศูนย์รวมสินค้าน่ารักพร้อมบริการประทับใจ สามารถเลือกช่องทางการติดต่อด้านล่างได้เลยค่ะ</p>
+                
+                <h3 class="text-lg font-semibold text-gray-700 mb-3 text-left">แพลตฟอร์มของทางร้าน</h3>
+                <div id="platforms-container" class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                    <!-- ข้อมูลแพลตฟอร์มจะถูกสร้างที่นี่โดย JS -->
+                </div>
+
+                <h3 class="text-lg font-semibold text-gray-700 mb-3 text-left">เว็บไซต์อื่นๆ ของเรา</h3>
+                <div id="websites-container" class="flex flex-col gap-2 text-left">
+                    <!-- ข้อมูลเว็บไซต์จะถูกสร้างที่นี่โดย JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ส่วนที่ 2: ตัวอย่างสินค้า -->
+        <section id="view-products" class="hidden space-y-4">
+            <h2 class="text-2xl font-bold text-pink-600 mb-4 border-l-4 border-pink-500 pl-3">ตัวอย่างสินค้าและราคา</h2>
+            <div id="products-container" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <!-- ข้อมูลสินค้าจะถูกสร้างที่นี่โดย JS -->
+            </div>
+        </section>
+
+        <!-- ส่วนที่ 3: เครดิตและรีวิว -->
+        <section id="view-reviews" class="hidden space-y-4">
+            <h2 class="text-2xl font-bold text-pink-600 mb-4 border-l-4 border-pink-500 pl-3">เครดิตและรีวิวจากลูกค้า</h2>
+            <div id="reviews-container" class="space-y-4">
+                <!-- ข้อมูลรีวิวจะถูกสร้างที่นี่โดย JS -->
+            </div>
+        </section>
+
+        <!-- ส่วนที่ 4: ระบบหลังบ้าน (Admin) -->
+        <section id="view-admin" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-pink-100">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-pink-600">ระบบจัดการหลังบ้าน</h2>
+                    <button onclick="switchTab('contact')" class="text-sm bg-gray-100 text-gray-600 px-3 py-1 rounded hover:bg-gray-200">ออกจากระบบ</button>
+                </div>
+                
+                <!-- เมนูย่อยในระบบแอดมิน -->
+                <div class="flex flex-wrap gap-2 mb-6 border-b border-pink-100 pb-4">
+                    <button onclick="renderAdminTable('Platforms')" class="admin-menu bg-pink-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-pink-600 transition-colors">จัดการแพลตฟอร์ม</button>
+                    <button onclick="renderAdminTable('Websites')" class="admin-menu bg-pink-100 text-pink-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-pink-200 transition-colors">จัดการเว็บไซต์</button>
+                    <button onclick="renderAdminTable('Products')" class="admin-menu bg-pink-100 text-pink-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-pink-200 transition-colors">จัดการสินค้า</button>
+                    <button onclick="renderAdminTable('Reviews')" class="admin-menu bg-pink-100 text-pink-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-pink-200 transition-colors">จัดการรีวิว</button>
+                </div>
+
+                <!-- พื้นที่แสดงฟอร์มและตาราง -->
+                <div id="admin-workspace">
+                    <p class="text-center text-gray-500 py-8">กรุณาเลือกเมนูด้านบนเพื่อจัดการข้อมูล</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ฟุตเตอร์ -->
+    <footer class="bg-white mt-auto py-6 text-center text-sm text-gray-400">
+        <p>&copy; 2026 SNI sindy Official. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript สำหรับระบบการทำงานทั้งหมด -->
+    <script>
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // นำ URL ที่ได้จากการ Deploy ของ Google Apps Script มาใส่ด้านล่างนี้
+        const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbyiM4EgycOym9rnQbG2XvCibU-rntfbLg6jeqX1AcEw3IeN6xXdjOHPW897y_hW9c2hvw/exec'; 
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+        let storeData = { Platforms: [], Websites: [], Products: [], Reviews: [] };
+        let isAdminAuthed = false;
+        
+        // รูปแบบข้อมูลสำหรับการจัดการแบบฟอร์ม
+        const formSchemas = {
+            Platforms: [{ key: 'Name', label: 'ชื่อแพลตฟอร์ม' }, { key: 'URL', label: 'ลิงก์ URL' }],
+            Websites: [{ key: 'Name', label: 'ชื่อเว็บไซต์' }, { key: 'URL', label: 'ลิงก์ URL' }],
+            Products: [{ key: 'Name', label: 'ชื่อสินค้า' }, { key: 'Price', label: 'ราคา (บาท)' }, { key: 'Image', label: 'URL รูปภาพ' }],
+            Reviews: [{ key: 'Customer', label: 'ชื่อลูกค้า' }, { key: 'Comment', label: 'ข้อความรีวิว' }, { key: 'Rating', label: 'คะแนน (1-5)' }]
+        };
+
+        // เริ่มต้นการดึงข้อมูลเมื่อโหลดหน้าเว็บ
+        window.onload = async () => {
+            await fetchStoreData();
+        };
+
+        // ฟังก์ชันดึงข้อมูลจาก GAS API (POST)
+        async function fetchStoreData() {
+            try {
+                const response = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'getData' })
+                });
+                
+                const result = await response.json();
+                if (result.status === 'success') {
+                    storeData = result.data;
+                    renderAllViews();
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('app-content').style.display = 'block';
+                } else {
+                    alert('เกิดข้อผิดพลาดในการโหลดข้อมูล: ' + result.message);
+                }
+            } catch (error) {
+                alert('ไม่สามารถเชื่อมต่อฐานข้อมูลได้ กรุณาตรวจสอบ URL ของ Web App');
+                console.error(error);
+            }
+        }
+
+        // ฟังก์ชันส่งข้อมูลไปยัง GAS API เพื่อบันทึก (POST)
+        async function saveData(type, dataObj) {
+            showLoading(true);
+            try {
+                const response = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'saveData', type: type, data: dataObj })
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    await fetchStoreData(); // โหลดข้อมูลใหม่หลังจากบันทึก
+                    renderAdminTable(type); // รีเฟรชตารางแอดมิน
+                }
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+            }
+            showLoading(false);
+        }
+
+        // ฟังก์ชันส่งข้อมูลไปยัง GAS API เพื่อลบ (POST)
+        async function deleteData(type, id) {
+            if (!confirm('ยืนยันการลบข้อมูลนี้?')) return;
+            showLoading(true);
+            try {
+                const response = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    redirect: 'follow',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'deleteData', type: type, id: id })
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    await fetchStoreData();
+                    renderAdminTable(type);
+                }
+            } catch (error) {
+                alert('เกิดข้อผิดพลาดในการลบข้อมูล');
+            }
+            showLoading(false);
+        }
+
+        // --- ส่วนการจัดการแสดงผล (Render) ---
+        function renderAllViews() {
+            renderPlatforms();
+            renderWebsites();
+            renderProducts();
+            renderReviews();
+        }
+
+        function renderPlatforms() {
+            const container = document.getElementById('platforms-container');
+            container.innerHTML = '';
+            storeData.Platforms.forEach(item => {
+                const btn = document.createElement('a');
+                btn.href = item.URL;
+                btn.target = '_blank';
+                btn.className = 'flex items-center justify-center gap-2 bg-pink-50 text-pink-600 p-3 rounded-xl border border-pink-100 hover:bg-pink-500 hover:text-white transition-colors duration-300 shadow-sm';
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" /><path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" /></svg> <span class="font-medium">${item.Name}</span>`;
+                container.appendChild(btn);
+            });
+        }
+
+        function renderWebsites() {
+            const container = document.getElementById('websites-container');
+            container.innerHTML = '';
+            storeData.Websites.forEach(item => {
+                const link = document.createElement('a');
+                link.href = item.URL;
+                link.target = '_blank';
+                link.className = 'flex items-center gap-2 text-pink-600 hover:text-pink-800 p-2 rounded-lg hover:bg-pink-50 transition-colors';
+                link.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg> <span>${item.Name}</span>`;
+                container.appendChild(link);
+            });
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('products-container');
+            container.innerHTML = '';
+            if (storeData.Products.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 col-span-2 text-center py-8">ยังไม่มีสินค้าในขณะนี้</p>';
+                return;
+            }
+            storeData.Products.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 hover:shadow-md transition-shadow';
+                card.innerHTML = `
+                    <img src="${item.Image}" alt="${item.Name}" class="w-full h-40 object-cover bg-gray-100" onerror="this.src='https://img2.pic.in.th/DA0D2171-669F-4863-B0AD-A3084C2E881A.png'">
+                    <div class="p-4 text-center">
+                        <h3 class="font-semibold text-gray-700 truncate">${item.Name}</h3>
+                        <p class="text-pink-500 font-bold mt-1">${item.Price} บาท</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderReviews() {
+            const container = document.getElementById('reviews-container');
+            container.innerHTML = '';
+            if (storeData.Reviews.length === 0) {
+                container.innerHTML = '<p class="text-gray-400 text-center py-8">ยังไม่มีรีวิวในขณะนี้</p>';
+                return;
+            }
+            storeData.Reviews.forEach(item => {
+                const starSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-pink-400" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>`;
+                const starsHtml = Array(parseInt(item.Rating) || 5).fill(starSvg).join('');
+                
+                const card = document.createElement('div');
+                card.className = 'bg-white p-4 rounded-2xl shadow-sm border border-pink-100 flex flex-col gap-2';
+                card.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-gray-700">${item.Customer}</span>
+                        <div class="flex">${starsHtml}</div>
+                    </div>
+                    <p class="text-gray-600 text-sm bg-pink-50 p-3 rounded-xl">" ${item.Comment} "</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // --- ระบบหลังบ้าน (Admin) ---
+        function checkAdminAccess() {
+            if (isAdminAuthed) {
+                document.getElementById('tab-admin').classList.remove('hidden');
+                switchTab('admin');
+                renderAdminTable('Platforms');
+                return;
+            }
+            const pwd = prompt('กรุณากรอกรหัสผ่านเพื่อเข้าระบบหลังบ้าน (ค่าเริ่มต้น: admin)');
+            if (pwd === 'admin') {
+                isAdminAuthed = true;
+                document.getElementById('tab-admin').classList.remove('hidden');
+                switchTab('admin');
+                renderAdminTable('Platforms');
+            } else if (pwd !== null) {
+                alert('รหัสผ่านไม่ถูกต้อง');
+            }
+        }
+
+        function renderAdminTable(type) {
+            // อัปเดตสีปุ่มเมนูแอดมิน
+            const buttons = document.querySelectorAll('.admin-menu');
+            buttons.forEach(btn => {
+                if (btn.innerText.includes(getThaiName(type))) {
+                    btn.className = 'admin-menu bg-pink-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-pink-600 transition-colors';
+                } else {
+                    btn.className = 'admin-menu bg-pink-100 text-pink-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-pink-200 transition-colors';
+                }
+            });
+
+            const workspace = document.getElementById('admin-workspace');
+            const fields = formSchemas[type];
+            let html = `
+                <div class="mb-6 bg-pink-50 p-4 rounded-xl border border-pink-100">
+                    <h3 class="text-lg font-bold text-pink-600 mb-4">เพิ่มข้อมูล: ${getThaiName(type)}</h3>
+                    <form id="admin-form" class="space-y-4" onsubmit="event.preventDefault(); submitAdminForm('${type}');">
+                        <input type="hidden" id="form-id" value="">
+                        <div class="grid grid-cols-1 gap-4">
+            `;
+            
+            fields.forEach(field => {
+                const inputType = field.key === 'Rating' ? 'number' : 'text';
+                const minMax = field.key === 'Rating' ? 'min="1" max="5"' : '';
+                html += `
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">${field.label}</label>
+                        <input type="${inputType}" id="form-${field.key}" ${minMax} class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent" required>
+                    </div>
+                `;
+            });
+
+            html += `
+                        </div>
+                        <div class="flex gap-2">
+                            <button type="submit" class="bg-pink-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-pink-600">บันทึกข้อมูล</button>
+                            <button type="button" onclick="resetForm()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-300">ล้างข้อมูล</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <h3 class="text-lg font-bold text-gray-700 mb-3">รายการที่มีอยู่</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-pink-100 text-pink-700">
+            `;
+            
+            fields.forEach(field => { html += `<th class="p-3 border-b border-pink-200 text-sm">${field.label}</th>`; });
+            html += `<th class="p-3 border-b border-pink-200 text-sm text-center">จัดการ</th></tr></thead><tbody>`;
+            
+            if (storeData[type].length === 0) {
+                html += `<tr><td colspan="${fields.length + 1}" class="text-center py-4 text-gray-400">ไม่มีข้อมูล</td></tr>`;
+            } else {
+                storeData[type].forEach(item => {
+                    html += `<tr class="border-b border-gray-100 hover:bg-gray-50">`;
+                    fields.forEach(field => {
+                        let val = item[field.key];
+                        if (field.key === 'Image' || field.key === 'URL') {
+                            val = `<a href="${val}" target="_blank" class="text-pink-500 underline text-xs">คลิกดูลิงก์</a>`;
+                        } else if (val.length > 30) {
+                            val = val.substring(0, 30) + '...';
+                        }
+                        html += `<td class="p-3 text-sm text-gray-600">${val}</td>`;
+                    });
+                    
+                    const itemJson = JSON.stringify(item).replace(/"/g, '&quot;');
+                    html += `
+                        <td class="p-3 text-center space-x-2">
+                            <button onclick="editAdminForm(${itemJson})" class="text-blue-500 hover:text-blue-700 text-sm font-medium">แก้ไข</button>
+                            <button onclick="deleteData('${type}', '${item.ID}')" class="text-red-500 hover:text-red-700 text-sm font-medium">ลบ</button>
+                        </td>
+                    </tr>`;
+                });
+            }
+            html += `</tbody></table></div>`;
+            workspace.innerHTML = html;
+        }
+
+        function getThaiName(type) {
+            const map = { 'Platforms': 'แพลตฟอร์ม', 'Websites': 'เว็บไซต์', 'Products': 'สินค้า', 'Reviews': 'รีวิว' };
+            return map[type] || type;
+        }
+
+        function submitAdminForm(type) {
+            const fields = formSchemas[type];
+            let dataObj = { ID: document.getElementById('form-id').value };
+            fields.forEach(field => {
+                dataObj[field.key] = document.getElementById(`form-${field.key}`).value;
+            });
+            saveData(type, dataObj);
+        }
+
+        function editAdminForm(item) {
+            document.getElementById('form-id').value = item.ID;
+            Object.keys(item).forEach(key => {
+                const el = document.getElementById(`form-${key}`);
+                if (el) el.value = item[key];
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            document.getElementById('admin-form').reset();
+            document.getElementById('form-id').value = '';
+        }
+
+        // --- ระบบสลับหน้า (Tabs) และโหลดดิ้ง ---
+        function switchTab(tabId) {
+            ['contact', 'products', 'reviews', 'admin'].forEach(id => {
+                const view = document.getElementById(`view-${id}`);
+                const tab = document.getElementById(`tab-${id}`);
+                if (!view || !tab) return;
+                
+                if (id === tabId) {
+                    view.classList.remove('hidden');
+                    tab.classList.replace('tab-inactive', 'tab-active');
+                } else {
+                    view.classList.add('hidden');
+                    tab.classList.replace('tab-active', 'tab-inactive');
+                }
+            });
+        }
+
+        function showLoading(show) {
+            const loader = document.getElementById('loader');
+            if (show) {
+                loader.style.display = 'flex';
+                loader.style.backgroundColor = 'rgba(253, 242, 248, 0.8)';
+                loader.querySelector('p').innerText = 'กำลังบันทึกข้อมูล...';
+            } else {
+                loader.style.display = 'none';
+                loader.style.backgroundColor = '#fdf2f8'; // bg-pink-50
+                loader.querySelector('p').innerText = 'กำลังโหลดข้อมูลร้าน...';
+            }
+        }
+    </script>
+</body>
+</html>
