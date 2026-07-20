@@ -4,15 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SNI sindy - Official Store</title>
-    <meta name="description" content="ติดต่อร้าน SNI sindy ดูรายละเอียดสินค้า รีวิวจากลูกค้า และช่องทางการติดต่อครบวงจร">
-    <meta name="keywords" content="SNI sindy, แคนวาโปร, canvapro, แอปพรีเมียม, netflix, chatgpt">
+    <!-- SEO Settings -->
+    <meta name="description" content="ติดต่อร้าน SNI sindy บริการแอปพรีเมียม บริการการตลาดครบวงจร">
+    <meta name="keywords" content="SNI sindy, แคนวาโปร, canvapro, chatgpt, Netflix, แอปพรีเมียม">
     <meta name="author" content="SNI sindy">
+    <!-- Favicon -->
     <link rel="icon" href="https://s.imgz.io/2026/07/15/DA0D2171-669F-4863-B0AD-A3084C2E881A787a7e4aae484696.png" type="image/png">
     
+    <!-- Google Fonts: Prompt -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Prompt', sans-serif; }
@@ -43,15 +47,13 @@
 </head>
 <body class="bg-gradient-to-br from-pink-50 via-white to-pink-100 min-h-screen flex flex-col text-gray-800 antialiased selection:bg-pink-300 selection:text-white">
 
+    <!-- หน้าจอโหลดข้อมูล (นำโลโก้ออกแล้ว) -->
     <div id="loader" class="fixed inset-0 bg-white/90 backdrop-blur-sm items-center justify-center z-50 flex-col">
-        <div class="relative w-20 h-20">
-            <div class="absolute inset-0 border-4 border-pink-100 rounded-full"></div>
-            <div class="absolute inset-0 border-4 border-pink-500 rounded-full border-t-transparent animate-spin"></div>
-            <img src="https://s.imgz.io/2026/07/15/DA0D2171-669F-4863-B0AD-A3084C2E881A787a7e4aae484696.png" class="absolute inset-2 rounded-full object-cover opacity-80" alt="loading">
-        </div>
+        <div class="w-16 h-16 border-4 border-pink-100 border-t-pink-500 rounded-full animate-spin"></div>
         <p class="mt-6 text-pink-500 font-medium tracking-wide">กำลังเตรียมข้อมูล...</p>
     </div>
 
+    <!-- แถบนำทาง (Navbar) แบบโปร่งแสงและลอยตัว -->
     <header class="sticky top-4 z-40 mx-4 max-w-4xl md:mx-auto bg-white/85 backdrop-blur-md shadow-sm border border-pink-100 rounded-full py-2 px-4 mb-8 transition-all">
         <div class="flex justify-between items-center mb-2 px-2 pt-1">
             <div class="flex items-center gap-3">
@@ -71,8 +73,10 @@
         </nav>
     </header>
 
+    <!-- เนื้อหาหลัก -->
     <main class="flex-grow max-w-4xl mx-auto w-full px-4 pb-12" id="app-content">
         
+        <!-- ส่วนที่ 1: ช่องทางการติดต่อ -->
         <section id="view-contact" class="space-y-8 animate-fade-in">
             <div class="bg-white/60 backdrop-blur-sm p-8 rounded-3xl shadow-sm text-center border border-pink-100/50">
                 <div class="relative w-28 h-28 mx-auto mb-6">
@@ -84,32 +88,39 @@
                 
                 <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 text-left px-2">ช่องทางการติดต่อ</h3>
                 <div id="platforms-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                    </div>
+                    <!-- ข้อมูลแพลตฟอร์ม -->
+                </div>
 
                 <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 text-left px-2">เว็บไซต์ที่เกี่ยวข้อง</h3>
                 <div id="websites-container" class="flex flex-col gap-3">
-                    </div>
+                    <!-- ข้อมูลเว็บไซต์ -->
+                </div>
             </div>
         </section>
 
+        <!-- ส่วนที่ 2: ตัวอย่างสินค้า -->
         <section id="view-products" class="hidden space-y-6">
             <div class="flex items-center gap-3 px-2">
                 <div class="w-1.5 h-6 bg-pink-500 rounded-full"></div>
                 <h2 class="text-2xl font-bold text-gray-800">สินค้าของเรา</h2>
             </div>
             <div id="products-container" class="grid grid-cols-2 md:grid-cols-3 gap-6">
-                </div>
+                <!-- ข้อมูลสินค้า -->
+            </div>
         </section>
 
+        <!-- ส่วนที่ 3: เครดิตและรีวิว -->
         <section id="view-reviews" class="hidden space-y-6">
             <div class="flex items-center gap-3 px-2">
                 <div class="w-1.5 h-6 bg-pink-500 rounded-full"></div>
                 <h2 class="text-2xl font-bold text-gray-800">เครดิตและรีวิว</h2>
             </div>
             <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                </div>
+                <!-- ข้อมูลรีวิว -->
+            </div>
         </section>
 
+        <!-- ส่วนที่ 4: ระบบหลังบ้าน (Admin) -->
         <section id="view-admin" class="hidden space-y-6">
             <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-pink-100">
                 <div class="flex justify-between items-center mb-8 pb-4 border-b border-gray-100">
@@ -136,15 +147,18 @@
         </section>
     </main>
 
+    <!-- ฟุตเตอร์ -->
     <footer class="mt-auto py-8 text-center">
         <p class="text-sm text-gray-400 font-medium">&copy; 2026 SNI sindy Official Store.</p>
     </footer>
 
+    <!-- CSS Animation เพิ่มเติมสำหรับการโหลดและแสดงผล -->
     <style>
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
     </style>
 
+    <!-- JavaScript หลัก -->
     <script>
         // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbyiM4EgycOym9rnQbG2XvCibU-rntfbLg6jeqX1AcEw3IeN6xXdjOHPW897y_hW9c2hvw/exec'; 
